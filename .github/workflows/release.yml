@@ -5,6 +5,9 @@ on:
     tags:
       - "ktparser-*"
 
+permissions:
+  deployments: write
+
 jobs:
   build:
 
