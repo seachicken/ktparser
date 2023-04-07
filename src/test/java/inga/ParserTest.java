@@ -2,6 +2,7 @@ package inga;
 
 import inga.model.KtFile;
 import inga.model.KtNamedFunction;
+import inga.model.KtProperty;
 import inga.model.PsiElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,9 @@ class ParserTest {
         assertThat(ktFile.getPackageName()).isEqualTo("fixtures");
 
         var ktClass = findChild(ktFile, "CLASS");
+        KtProperty ktProperty = findChild(ktClass.getChildren().get(0), "PROPERTY");
+        assertThat(ktProperty.getName()).isEqualTo("field");
+
         KtNamedFunction ktFun = findChild(ktClass.getChildren().get(0), "FUN");
         assertThat(ktFun.getName()).isEqualTo("method");
     }
