@@ -3,6 +3,7 @@ package inga;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
 import inga.model.KtFile;
+import inga.model.KtNamedFunction;
 import inga.model.PsiElement;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
@@ -40,6 +41,13 @@ public class Parser implements AutoCloseable {
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
                     file.getPackageFqName().asString());
+        } else if (element instanceof org.jetbrains.kotlin.psi.KtNamedFunction namedFunction) {
+            return new KtNamedFunction(
+                    element.getNode().getElementType().toString(),
+                    element.getTextOffset(),
+                    element.getTextRange(),
+                    Arrays.stream(element.getChildren()).map(this::parse).toList(),
+                    namedFunction.getName());
         } else {
             return new PsiElement(
                     element.getNode().getElementType().toString(),
