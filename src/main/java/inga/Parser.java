@@ -8,12 +8,11 @@ import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
 
-import java.io.Closeable;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-public class Parser implements Closeable {
+public class Parser implements AutoCloseable {
     private final KotlinCoreEnvironment environment;
     private final Disposable disposable;
 
