@@ -34,9 +34,11 @@ class ParserTest {
         var ktClass = findChild(ktFile, "CLASS");
         KtProperty ktProperty = findChild(ktClass.getChildren().get(0), "PROPERTY");
         assertThat(ktProperty.getName()).isEqualTo("field");
+        assertThat(ktProperty.getFqName()).isEqualTo("fixtures.Class.field");
 
         KtNamedFunction ktFun = findChild(ktClass.getChildren().get(0), "FUN");
         assertThat(ktFun.getName()).isEqualTo("method");
+        assertThat(ktFun.getFqName()).isEqualTo("fixtures.Class.method");
     }
 
     private <T extends PsiElement> T findChild(PsiElement element, String type) {

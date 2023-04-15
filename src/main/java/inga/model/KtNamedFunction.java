@@ -10,10 +10,12 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class KtNamedFunction extends PsiElement {
     private String name;
+    private String fqName;
 
     public KtNamedFunction(String type, int textOffset, TextRange textRange, List<PsiElement> children,
-                           String name) {
+                           String name, String fqName) {
         super(type, textOffset, textRange, children);
         this.name = name;
+        this.fqName = fqName;
     }
 }

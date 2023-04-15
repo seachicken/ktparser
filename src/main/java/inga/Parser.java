@@ -48,14 +48,16 @@ public class Parser implements AutoCloseable {
                     element.getTextOffset(),
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
-                    property.getName());
+                    property.getName(),
+                    property.getFqName().asString());
         } else if (element instanceof org.jetbrains.kotlin.psi.KtNamedFunction namedFunction) {
             return new KtNamedFunction(
                     element.getNode().getElementType().toString(),
                     element.getTextOffset(),
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
-                    namedFunction.getName());
+                    namedFunction.getName(),
+                    namedFunction.getFqName().asString());
         } else {
             return new PsiElement(
                     element.getNode().getElementType().toString(),
