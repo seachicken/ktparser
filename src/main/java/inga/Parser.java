@@ -49,7 +49,7 @@ public class Parser implements AutoCloseable {
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
                     property.getName(),
-                    property.getFqName().asString());
+                    property.getFqName() == null ? null : property.getFqName().asString());
         } else if (element instanceof org.jetbrains.kotlin.psi.KtNamedFunction namedFunction) {
             return new KtNamedFunction(
                     element.getNode().getElementType().toString(),
@@ -57,7 +57,7 @@ public class Parser implements AutoCloseable {
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
                     namedFunction.getName(),
-                    namedFunction.getFqName().asString());
+                    namedFunction.getFqName() == null ? null : namedFunction.getFqName().asString());
         } else {
             return new PsiElement(
                     element.getNode().getElementType().toString(),
