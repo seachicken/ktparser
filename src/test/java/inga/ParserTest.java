@@ -1,9 +1,6 @@
 package inga;
 
-import inga.model.KtFile;
-import inga.model.KtNamedFunction;
-import inga.model.KtProperty;
-import inga.model.PsiElement;
+import inga.model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +27,11 @@ class ParserTest {
         var ktFile = (KtFile) parser.parse(readFile("Class.kt"));
         assertThat(ktFile.getType()).isEqualTo("kotlin.FILE");
         assertThat(ktFile.getPackageName()).isEqualTo("fixtures");
+
+        var importList = findChild(ktFile, "IMPORT_LIST");
+        assertThat(importList.getChildren())
+                .extracting("fqName")
+                .containsExactly("fixtures.a.ClassA");
 
         var ktClass = findChild(ktFile, "CLASS");
         KtProperty ktProperty = findChild(ktClass.getChildren().get(0), "PROPERTY");

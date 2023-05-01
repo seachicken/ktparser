@@ -2,10 +2,7 @@ package inga;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.util.Disposer;
-import inga.model.KtFile;
-import inga.model.KtNamedFunction;
-import inga.model.KtProperty;
-import inga.model.PsiElement;
+import inga.model.*;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.config.CompilerConfiguration;
@@ -42,6 +39,13 @@ public class Parser implements AutoCloseable {
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
                     file.getPackageFqName().asString());
+        } else if (element instanceof org.jetbrains.kotlin.psi.KtImportDirective importDirective) {
+            return new KtImportDirective(
+                    element.getNode().getElementType().toString(),
+                    element.getTextOffset(),
+                    element.getTextRange(),
+                    Arrays.stream(element.getChildren()).map(this::parse).toList(),
+                    importDirective.getImportedFqName() == null ? null : importDirective.getImportedFqName().asString());
         } else if (element instanceof org.jetbrains.kotlin.psi.KtProperty property) {
             return new KtProperty(
                     element.getNode().getElementType().toString(),
@@ -58,6 +62,13 @@ public class Parser implements AutoCloseable {
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
                     namedFunction.getName(),
                     namedFunction.getFqName() == null ? null : namedFunction.getFqName().asString());
+        } else if (element instanceof org.jetbrains.kotlin.psi.KtNameReferenceExpression nameReferenceExpression) {
+            return new KtNameReferenceExpression(
+                    element.getNode().getElementType().toString(),
+                    element.getTextOffset(),
+                    element.getTextRange(),
+                    Arrays.stream(element.getChildren()).map(this::parse).toList(),
+                    nameReferenceExpression.getReferencedName());
         } else {
             return new PsiElement(
                     element.getNode().getElementType().toString(),
