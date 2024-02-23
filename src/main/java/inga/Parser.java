@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Parser implements AutoCloseable {
     private final KotlinCoreEnvironment environment;
@@ -46,6 +47,15 @@ public class Parser implements AutoCloseable {
                     element.getTextRange(),
                     Arrays.stream(element.getChildren()).map(this::parse).toList(),
                     importDirective.getImportedFqName() == null ? null : importDirective.getImportedFqName().asString());
+        } else if (element instanceof org.jetbrains.kotlin.psi.KtModifierList modifiers) {
+            return new PsiElement(
+                    element.getNode().getElementType().toString(),
+                    element.getTextOffset(),
+                    element.getTextRange(),
+                    // visibility modifiers cannot be obtained with getChildren()
+                    (modifiers.getChildren().length == 0
+                            ? Stream.of(modifiers.getFirstChild())
+                            : Arrays.stream(modifiers.getChildren())).map(this::parse).toList());
         } else if (element instanceof org.jetbrains.kotlin.psi.KtClass clazz) {
             return new KtNameReferenceExpression(
                     element.getNode().getElementType().toString(),
